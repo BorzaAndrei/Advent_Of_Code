@@ -1,6 +1,6 @@
 numbers = []
 
-with(open("./input/1.txt")) as r:
+with(open("input/1.txt")) as r:
     for number in r.readlines():
         numbers.append(int(number))
 
