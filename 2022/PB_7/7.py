@@ -11,9 +11,6 @@ class SystemItem:
     def calculate_size(self):
         pass
 
-    def is_dir(self) -> bool:
-        pass
-
 
 @dataclass
 class File(SystemItem):
@@ -22,23 +19,20 @@ class File(SystemItem):
     def calculate_size(self):
         return self.size
 
-    def is_dir(self):
-        return False
-
 
 @dataclass
 class Dir(SystemItem):
     parent: Optional[Dir]
-    content: List[SystemItem]
+    files: List[File]
+    child_dirs: List[Dir]
 
     def calculate_size(self):
         size = 0
-        for item in self.content:
-            size += item.calculate_size()
+        for f in self.files:
+            size += f.calculate_size()
+        for child_d in self.child_dirs:
+            size += child_d.calculate_size()
         return size
-
-    def is_dir(self):
-        return True
 
 
 @dataclass
@@ -55,12 +49,12 @@ class DirManagement:
         else:
             if dir_name == '/':
                 self.current_dir = self.home_dir
-            for c in self.current_dir.content:
-                if c.name == dir_name and c.is_dir():
+            for c in self.current_dir.child_dirs:
+                if c.name == dir_name:
                     self.current_dir = c
 
 
-home = Dir("/", None, [])
+home = Dir("/", None, [], [])
 dirManagement = DirManagement(None, home)
 with open("input.txt") as file:
     for line in file.readlines():
@@ -73,10 +67,10 @@ with open("input.txt") as file:
             if 'dir' not in stripped_line:
                 file_length, file_name = stripped_line.split()
                 file = File(file_name, int(file_length))
-                dirManagement.current_dir.content.append(file)
+                dirManagement.current_dir.files.append(file)
             else:
-                new_dir = Dir(stripped_line.split()[1], dirManagement.current_dir, [])
-                dirManagement.current_dir.content.append(new_dir)
+                new_dir = Dir(stripped_line.split()[1], dirManagement.current_dir, [], [])
+                dirManagement.current_dir.child_dirs.append(new_dir)
 
 s = 0
 to_delete = 30000000 - (70000000 - dirManagement.home_dir.calculate_size())  # need - (total - currently_occupied)
@@ -91,11 +85,10 @@ def pretty_print_dirs_check_sizes(base_dir: Dir, depth):
     if size >= to_delete:
         bigger.append(size)
     print(f"{'🍔' * depth}{base_dir.name} - {size}".replace("🍔", "\t"))
-    for f in base_dir.content:
-        if f.is_dir():
-            pretty_print_dirs_check_sizes(f, depth + 1)
-        else:
-            print(f"{'🍔' * (depth + 1)}{f.name} - {f.calculate_size()}".replace("🍔", "\t"))
+    for f in base_dir.files:
+        print(f"{'🍔' * (depth + 1)}{f.name} - {f.calculate_size()}".replace("🍔", "\t"))
+    for child_d in base_dir.child_dirs:
+        pretty_print_dirs_check_sizes(child_d, depth + 1)
 
 
 pretty_print_dirs_check_sizes(home, 0)
