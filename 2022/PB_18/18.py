@@ -54,30 +54,35 @@ with open("input.txt") as file:
                 common_sides.add(tuple(sorted_side))
 
 
-def fill(x, y , z, cubes):
+def fill(x, y, z, cubes, MAXIM=8):
     q = [(x, y, z)]
     visited = []
     while len(q) > 0:
         curr_x, curr_y, curr_z = q.pop(0)
         for add_x in range(-1, 2):
-            for add_y in range(-1, 2):
-                for add_z in range(-1, 2):
-                    if (curr_x + add_x, curr_y + add_y, curr_z) not in cubes and (curr_x + add_x, curr_y + add_y, curr_z) not in visited:
-                        q.append((curr_x + add_x, curr_y + add_y, curr_z))
-                        visited.append((curr_x + add_x, curr_y + add_y, curr_z))
+            if -1 <= curr_x + add_x <= MAXIM:
+                for add_y in range(-1, 2):
+                    if -1 <= curr_y + add_y <= MAXIM:
+                        for add_z in range(-1, 2):
+                            if (add_x, add_y, add_z) in ((1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)):
+                                if -1 <= curr_z + add_z <= MAXIM and (
+                                        curr_x + add_x, curr_y + add_y, curr_z + add_z) not in cubes and (
+                                        curr_x + add_x, curr_y + add_y, curr_z + add_z) not in visited:
+                                    q.append((curr_x + add_x, curr_y + add_y, curr_z + add_z))
+                                    visited.append((curr_x + add_x, curr_y + add_y, curr_z + add_z))
+    return visited
 
-for x in range(30):
-    for y in range(30):
-        for z in range(30):
-            if (x, y, z) not in cubes:
+
+MAXIM = 30
+exterior_air = fill(-1, -1, -1, cubes, MAXIM)
+for x in range(-1, MAXIM):
+    for y in range(-1, MAXIM):
+        for z in range(-1, MAXIM):
+            if (x, y, z) not in cubes and (x, y, z) not in exterior_air:
                 cube = Cube(x, y, z)
                 cube_sides = cube.construct_sides()
-                all_in_common = True
                 for side in cube_sides:
-                    if tuple(sorted(side, key=lambda tup: (tup[0], tup[1], tup[2]))) not in common_sides:
-                        all_in_common = False
-                        break
-                if all_in_common:
-                    c -= 6
-                    print((x, y, z))
+                    if tuple(sorted(side, key=lambda tup: (tup[0], tup[1], tup[2]))) in common_sides:
+                        c -= 1
+
 print(c)
