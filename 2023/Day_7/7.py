@@ -15,6 +15,7 @@ class Hand:
         # Part 1
         # replace most_common_non_j with counter[0][1]
         # replace second_most_common_non_j with counter[1][1]
+        # replace strength with first one
  
         # Part 2
         j_list = list(filter(lambda x: x[0] == 'J', counter))
