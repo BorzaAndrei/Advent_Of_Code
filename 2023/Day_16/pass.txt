@@ -1,0 +1,174 @@
+JOB DEFINITION
+
+{
+  "jobDefinitionName": "search-api-hard-reindex-list-indexes-production",
+  "jobDefinitionArn": "arn:aws:batch:us-east-1:923133779345:job-definition/search-api-hard-reindex-list-indexes-production:4",
+  "revision": 4,
+  "status": "ACTIVE",
+  "type": "container",
+  "parameters": {},
+  "containerProperties": {
+    "image": "923133779345.dkr.ecr.us-east-1.amazonaws.com/mojo:production",
+    "command": [
+      "bundle",
+      "exec",
+      "rake",
+      "algolia2:hard_reindex_list_indexes"
+    ],
+    "volumes": [],
+    "environment": [
+      {
+        "name": "RAILS_ENV",
+        "value": "production"
+      },
+      {
+        "name": "IS_AWS",
+        "value": "true"
+      },
+      {
+        "name": "HALT_ON_INDEX_ERROR",
+        "value": "true"
+      }
+    ],
+    "mountPoints": [],
+    "ulimits": [],
+    "resourceRequirements": [
+      {
+        "value": "15360",
+        "type": "MEMORY"
+      },
+      {
+        "value": "16",
+        "type": "VCPU"
+      }
+    ],
+    "secrets": []
+  },
+  "tags": {},
+  "containerOrchestrationType": "ECS"
+}
+
+Priority 1 for job queue
+
+COMPUTE environment
+
+{
+  "computeEnvironmentName": "search-api-compute-environment-production",
+  "computeEnvironmentArn": "arn:aws:batch:us-east-1:923133779345:compute-environment/search-api-compute-environment-production",
+  "ecsClusterArn": "arn:aws:ecs:us-east-1:923133779345:cluster/search-api-compute-environment-production_Batch_465c6b1f-8d0e-37bf-a1f4-290a7e6e154f",
+  "tags": {},
+  "type": "MANAGED",
+  "state": "ENABLED",
+  "status": "VALID",
+  "statusReason": "ComputeEnvironment Healthy",
+  "computeResources": {
+    "type": "EC2",
+    "minvCpus": 0,
+    "maxvCpus": 36,
+    "desiredvCpus": 0,
+    "instanceTypes": [
+      "optimal"
+    ],
+    "subnets": [
+      "subnet-039acdadb8545a100",
+      "subnet-0565039b86504ac97",
+      "subnet-0f82248da6a23e6dc"
+    ],
+    "securityGroupIds": [
+      "sg-0fda867350b326af4"
+    ],
+    "instanceRole": "arn:aws:iam::923133779345:instance-profile/da-search-api-batch-production20190910183432404500000002",
+    "tags": {},
+    "bidPercentage": 0,
+    "ec2Configuration": [
+      {
+        "imageType": "ECS_AL2"
+      }
+    ]
+  },
+  "serviceRole": "arn:aws:iam::923133779345:role/da-search-api-batch_service-production",
+  "containerOrchestrationType": "ECS",
+  "uuid": "befc8f41-ba7c-3697-ab10-2d720edb9a6f"
+}
+
+
+JOB
+
+{
+  "jobArn": "arn:aws:batch:us-east-1:923133779345:job/57aa1b5c-9553-4b3b-bb0c-116dac0ab077",
+  "jobName": "search-api-hard-reindex-list-indexes-staging",
+  "jobId": "57aa1b5c-9553-4b3b-bb0c-116dac0ab077",
+  "jobQueue": "arn:aws:batch:us-east-1:923133779345:job-queue/search-api-job-queue-staging",
+  "status": "SUCCEEDED",
+  "attempts": [
+    {
+      "container": {
+        "containerInstanceArn": "arn:aws:ecs:us-east-1:923133779345:container-instance/search-api-compute-environment-staging_Batch_50cfb257-d4ec-37e8-ba9e-3f434c3b4391/0849ae19ab234f2188f0f10bf1d336dc",
+        "taskArn": "arn:aws:ecs:us-east-1:923133779345:task/search-api-compute-environment-staging_Batch_50cfb257-d4ec-37e8-ba9e-3f434c3b4391/699030ba3f744f13aa0bdaf01bbf98a9",
+        "exitCode": 0,
+        "logStreamName": "search-api-hard-reindex-list-indexes-staging/default/699030ba3f744f13aa0bdaf01bbf98a9",
+        "networkInterfaces": []
+      },
+      "startedAt": 1702283688411,
+      "stoppedAt": 1702285976420,
+      "statusReason": "Essential container in task exited",
+      "taskProperties": []
+    }
+  ],
+  "statusReason": "Essential container in task exited",
+  "createdAt": 1702283442320,
+  "retryStrategy": {
+    "attempts": 1,
+    "evaluateOnExit": []
+  },
+  "startedAt": 1702283688411,
+  "stoppedAt": 1702285976420,
+  "dependsOn": [],
+  "jobDefinition": "arn:aws:batch:us-east-1:923133779345:job-definition/search-api-hard-reindex-list-indexes-staging:5",
+  "parameters": {},
+  "container": {
+    "image": "923133779345.dkr.ecr.us-east-1.amazonaws.com/mojo:staging",
+    "command": [
+      "bundle",
+      "exec",
+      "rake",
+      "algolia2:hard_reindex_list_indexes"
+    ],
+    "volumes": [],
+    "environment": [
+      {
+        "name": "RAILS_ENV",
+        "value": "staging"
+      },
+      {
+        "name": "IS_AWS",
+        "value": "true"
+      },
+      {
+        "name": "HALT_ON_INDEX_ERROR",
+        "value": "true"
+      }
+    ],
+    "mountPoints": [],
+    "ulimits": [],
+    "exitCode": 0,
+    "containerInstanceArn": "arn:aws:ecs:us-east-1:923133779345:container-instance/search-api-compute-environment-staging_Batch_50cfb257-d4ec-37e8-ba9e-3f434c3b4391/0849ae19ab234f2188f0f10bf1d336dc",
+    "taskArn": "arn:aws:ecs:us-east-1:923133779345:task/search-api-compute-environment-staging_Batch_50cfb257-d4ec-37e8-ba9e-3f434c3b4391/699030ba3f744f13aa0bdaf01bbf98a9",
+    "logStreamName": "search-api-hard-reindex-list-indexes-staging/default/699030ba3f744f13aa0bdaf01bbf98a9",
+    "networkInterfaces": [],
+    "resourceRequirements": [
+      {
+        "value": "15360",
+        "type": "MEMORY"
+      },
+      {
+        "value": "16",
+        "type": "VCPU"
+      }
+    ],
+    "secrets": []
+  },
+  "tags": {},
+  "platformCapabilities": [],
+  "eksAttempts": []
+}
